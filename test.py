@@ -11,7 +11,8 @@ def create_array_from_file(file):
         data_for_array = data_file.readlines()
         array_data = convert_to_array(data_for_array)
         rows_and_columns = number_of_rows_and_columns(array_data)
-        print(rows_and_columns)
+        # print(rows_and_columns)
+        find_min_and_max(array_data)
 
 
 # creates a 2D array out of the txt file data
@@ -26,6 +27,21 @@ def number_of_rows_and_columns(array):
     number_of_rows = len(array)
     number_of_columns = len(array[0])
     return [number_of_columns, number_of_rows]
+
+
+# find min and max
+def find_min_and_max(array):
+    min_of_array = min([min(x) for x in array])
+    print(min_of_array)
+    max_of_array = max([max(y) for y in array])
+    print(max_of_array)
+
+
+# draw map
+
+
+
+# draw routes
 
 
 # opens file path, checks if it's a file and calls function if so
