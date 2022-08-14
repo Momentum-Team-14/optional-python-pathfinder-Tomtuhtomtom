@@ -14,6 +14,7 @@ def create_array_from_file(file):
         rows_and_columns_data = number_of_rows_and_columns(array_data)
         min_and_max_data = find_min_and_max(array_data)
         draw_map(rows_and_columns_data, min_and_max_data, array_data)
+        draw_routes(array_data, rows_and_columns_data)
 
 
 # creates a 2D array out of the txt file data
@@ -42,13 +43,39 @@ def draw_map(rows_and_columns, min_and_max, array):
     map_image = Image.new('RGBA', (rows_and_columns[0], rows_and_columns[1]))
     for x in range(rows_and_columns[0]):
         for y in range(rows_and_columns[1]):
-            numerator = ((min_and_max[1] - array[x][y]) * 255)
+            # numerator = ((min_and_max[1] - array[y][x]) * 255)
+            # ^ to make color represent low elevation
+            numerator = ((array[y][x] - min_and_max[0]) * 255)
+            # ^ to make color represent high elevation
             denominator = (min_and_max[1] - min_and_max[0])
             map_image.putpixel((x, y), (0, int(numerator / denominator), 0))
     map_image.save('map.png')
 
 
 # draw routes
+def draw_routes(array, rows_and_columns):
+    im = Image.new('RGBA', (rows_and_columns[0], rows_and_columns[1]), 'green')
+    # im = Image.open('map.png')  will use in final version
+    draw = ImageDraw.Draw(im)
+    start_array = array[0][0]
+    for i in range(rows_and_columns[0], rows_and_columns[1], 10):
+        option_a = abs(array[i + 1][i - 1] - start_array)
+        option_b = abs(array[i + 1][i] - start_array)
+        option_c = abs(array[i + 1][i + 1] - start_array)
+        minimum_distance = min([option_a, option_b, option_c])
+        start = (i, i)  # not sure about this yet
+        if minimum_distance == option_a:
+            finish = (i + 1, i - 1)
+            start_array = array[i + 1][i - 1]
+        elif minimum_distance == option_b:
+            finish = (i + 1, i)
+            start_array = array[i + 1][i]
+        elif minimum_distance == option_c:
+            finish = (i + 1, i + 1)
+            start_array = array[i + 1][i + 1]
+        draw.line([start, finish], fill='black')
+    im.save('routes.png')
+    # im.save('map.png')  will use in final version
 
 
 # opens file path, checks if it's a file and calls function if so
