@@ -58,11 +58,18 @@ def draw_routes(array, rows_and_columns):
     # im = Image.open('map.png')  will use in final version
     draw = ImageDraw.Draw(im)
     start_array = array[0][0]
-    for i in range(rows_and_columns[0], rows_and_columns[1], 10):
+    # for i in range((int(rows_and_columns[0] / 2)), rows_and_columns[1], 10):
+    #     draw.line([(i, 0), (600, i - 300)], fill='black')
+    # ^ from sample
+    for i in range(rows_and_columns[0], rows_and_columns[1], 1):
         option_a = abs(array[i + 1][i - 1] - start_array)
+        print(option_a)
         option_b = abs(array[i + 1][i] - start_array)
+        print(option_b)
         option_c = abs(array[i + 1][i + 1] - start_array)
+        print(option_c)
         minimum_distance = min([option_a, option_b, option_c])
+        print(minimum_distance)
         start = (i, i)  # not sure about this yet
         if minimum_distance == option_a:
             finish = (i + 1, i - 1)
